@@ -1,0 +1,18 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | Administração do Sistema PPGI{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Sistema PPGI' %}</h1>
+{% endblock %}
+
+{%block content_title%} 
+	{%if title == "Administração do Site"%}
+		<h1>Administração do Sistema</h1> 
+	{%else%}
+		{{block.super}}
+	{%endif%} 
+{%endblock%}
+
+{% block nav-global %}{% endblock %}

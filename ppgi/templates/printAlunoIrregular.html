@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{%block extrastyle%}
+	<link rel="stylesheet"  href="{{STATIC_URL}}css/base.css" />
+	<style>
+		img{
+			align:center;
+		}
+	</style>
+{%endblock%}
+
+{%block h1Titulo%}Alunos Irregulares {%if nivel == "M" %}- Mestrado{%else%}- Doutorado{%endif%} {%endblock%}
+
+{%block conteudo%}
+
+	<table border="1">
+		<tr>
+			<th>DRE</th>
+			<th>Nome</th>
+			<th>Ano de Ingresso</th>
+			<th>Situação Matrícula</th>
+			<th>CRA</th>
+			<th>Conceito</th>
+			<th>Abandono</th>
+		</tr>
+		
+		<tbody>
+			
+			{%for dic in listaDicDados%}
+			<tr>
+				<td>{{dic.aluno.dre}}</td>
+				<td>{{dic.aluno.nome}}</td>
+				<td>{{dic.aluno.anoingresso}}</td>
+				<td>{{dic.aluno.situacaomatricula}}</td>
+				<td>
+					{%if dic.cra %}
+						<div align="center"><img src="/static/admin/img/icon-yes.gif" /></div>
+					{%else%}
+						<div align="center"><img src="/static/admin/img/icon-no.gif" /> </div>
+					{%endif%}
+				</td>
+				<td>
+					{%if dic.conceito %}
+						<div align="center"><img src="/static/admin/img/icon-yes.gif" /></div>
+					{%else%}
+						<div align="center"><img src="/static/admin/img/icon-no.gif" /> </div>
+					{%endif%}
+				</td>
+				<td>
+					{%if dic.abandono %}
+						<div align="center"><img src="/static/admin/img/icon-yes.gif" /></div>
+					{%else%}
+						<div align="center"><img src="/static/admin/img/icon-no.gif" /></div> 
+					{%endif%}
+				</td>
+			</tr>
+			
+			{%endfor%}
+			
+		</tbody>
+		
+	</table>
+
+{%endblock%}

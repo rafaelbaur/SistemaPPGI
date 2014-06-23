@@ -1,0 +1,44 @@
+body{
+	color: #333333;
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    font-size: 12px;
+}
+
+table{
+	border:1px solid gray;
+	border-collapse:collapse;
+}
+
+table td{
+	padding:5px;
+}
+
+.loadpage{
+	background-image: url('media/icon-loader.gif');
+	background-repeat:no-repeat;
+	background-position:2% center;
+	border: 1px solid #CCCCCC;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+    vertical-align: middle;
+    width: 300px;
+}
+.loadpage p{
+	padding-left: 30px;
+}
+
+.loadpage-erro{
+	background-image: url('media/icon-error.png');
+	background-repeat:no-repeat;
+	background-position:2% center;
+	border: 1px solid red;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+    vertical-align: middle;
+    width: 300px;
+}
+.loadpage-erro p{
+	padding-left: 30px;
+}

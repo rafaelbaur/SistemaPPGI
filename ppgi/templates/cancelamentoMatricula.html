@@ -1,0 +1,93 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_modify adminmedia %}
+
+{% block breadcrumbs %}{% if not is_popup %}
+<div class="breadcrumbs">
+     <a href="../">{% trans "Home" %}</a> ›
+     {% trans 'Sugerir Cancelamento de Matrícula' %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class='actions'>
+		
+	<label for='selectop'>Filtro</label>
+	<select id='selectop'>
+		<option value="0">0</option>
+		<option value="0">1</option>
+		<option value="0">2</option>
+	</select>
+</div>
+
+<div class=''>
+	
+	
+	<table id='result_list'>
+		<caption>
+			<a href='' class='section'>Alunos em situação de Cancelamento</a> </caption>
+		<tr>
+			<th>DRE</th>
+			<th>Aluno</th>
+			<th>CRA</th>
+			<th>Conceito</th>
+			<th>Abandono</th>
+		
+		</tr>
+		
+		{%for value in alunosIrregulares%}
+		<tr>
+			<td><a href='../aluno/visualizar?id={{value.aluno.id}}'>{{value.aluno.dre}}</a></td>
+			<td><a href='../aluno/visualizar?id={{value.aluno.id}}'>{{value.aluno}}</a></td>
+			<td align="center">
+			{%if value.regulamentoCra %}
+				CRA <br />
+			{%endif%}
+			
+			</td>
+			<td align="center">
+			{%if value.regulamentoConceito %}
+				C <br />
+			{%endif%}	
+			</td>
+			<td align="center">
+			{%if value.regulamentoAbandono %}
+				ABN <br />
+			{%endif%}	
+			</td>
+			
+		</tr>
+		{%endfor%}
+	
+	</table>
+	<div id=content-main>
+		<div id=changelist>
+			<div id="changelist-filter">
+				<h2>Filtro</h2>
+				<h3>Reprovacao</h3>
+			</div>
+			
+		</div>
+	</div>
+	
+	<br />
+	
+	<div>
+		
+		{%if alunosIrregulares.has_previous%}
+		<a href='?pag={{alunosIrregulares.previous_page_number}}' >anterior</a>
+		{%endif%}
+		
+		Pagina {{alunosIrregulares.number}} de {{alunosIrregulares.paginator.num_pages}}
+		
+		{%if alunosIrregulares.has_next%}
+		<a href='?pag={{alunosIrregulares.next_page_number}}' >próximo</a>
+		{%endif%}
+		
+		
+	</div>
+	
+</div>
+
+{% endblock %}

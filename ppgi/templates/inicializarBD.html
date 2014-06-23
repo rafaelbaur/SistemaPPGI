@@ -1,0 +1,33 @@
+{%extends 'base.html' %}
+
+{%block extrahead%}
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		
+		$.ajax({
+			url:'inicializar',
+			success: function(retorno){
+				window.location.href = "../../"
+			},
+		}).fail(function(){
+			$(".loadpage").hide();
+			$(".loadpage-erro").css("display", "block");
+		});
+	});
+</script>
+
+{%endblock%}
+
+{%block conteudo%}
+	
+<div class="loadpage">
+	<p>Carregando Dados. Por favor aguarde e não atualize esta página.</p>
+</div>
+
+<div class="loadpage-erro" style="display:none">
+	<p>Ocorreu um erro ao carregar os dados. Verifique se os arquivos estão corretos.</p>
+</div>
+
+{%endblock%}
+

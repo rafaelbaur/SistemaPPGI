@@ -1,0 +1,25 @@
+{%extends 'admin/base_site.html'%}
+{% load url from future %}
+
+{%block breadcrumbs%}
+
+<div class="breadcrumbs">
+	<a href="{%url 'admin:index'%}">Início</a> ›
+	<a href="../">Ppgi</a> ›
+	<a href="">Upload de Dados</a>	
+</div>
+
+{%endblock%}
+
+{%block content%}
+
+<form method="post" action="./" enctype="multipart/form-data" >{%csrf_token%}
+	
+	<table>
+		{{form}}
+	</table>
+	
+	<input type="submit" />
+</form>
+
+{%endblock%}

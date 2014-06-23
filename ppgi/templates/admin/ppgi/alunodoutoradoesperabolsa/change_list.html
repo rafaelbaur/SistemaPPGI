@@ -1,0 +1,200 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_modify adminmedia %}
+
+{%block extrahead%}
+
+<link rel="stylesheet" href="{{ STATIC_URL }}css/admin-extrastyle.css" />
+<link rel="stylesheet" href="{{ STATIC_URL }}js/jquery-ui-1.9.2.custom/css/cupertino/jquery-ui-1.9.2.custom.css" />
+<script type="text/javascript" src="{{ STATIC_URL }}js/util.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.chromatable.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function($) {
+    	var datahoje = new Date()
+    	
+        $(".data").datepicker({
+		    dateFormat: 'dd/mm/yy',
+		    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+		    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+		    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+		    nextText: 'Próximo',
+		    prevText: 'Anterior',
+		    minDate: datahoje,
+		    defaultDate: datahoje,
+		    onClose: function(){
+		    	var dataSelecionada = $("#datainicio").datepicker('getDate')
+		    	if (dataSelecionada){
+		    		$("#datafim").datepicker('option', 'minDate', dataSelecionada);	
+		    	}else{
+		    		$("#datafim").datepicker('option', 'minDate', datahoje);
+		    	}
+		    	
+		    }
+		});
+		
+		$(".alocarBolsa").click(function(){
+			$("#datainicio").val("");
+			idAluno = $(this).children("input").attr("id");
+			$("#idAluno").val(idAluno)
+			
+			$.ajax({
+				url: './ajax_alunoInfo/',
+				type: 'GET',
+				dataType: 'json',
+				data:	{id: idAluno},
+				success: function(retorno){
+					var anoIngresso = retorno[0].fields['anoingresso'];
+					var periodoIngresso = retorno[0].fields['periodoingresso'];
+					var nome = retorno[0].fields['nome'];
+					var mesfim;
+					var datafim = new Date();
+					switch(periodoIngresso){
+						case 1:
+							mesfim = '02'
+							break;
+						case 2:
+							mesfim = '05'
+							break;
+						case 3:
+							mesfim = '08'
+							break;
+						case 4:
+							mesfim = '11'
+							break;
+					}
+					$("#hidden-form h1").html(nome);
+					
+					datafim.setDate(01)
+					datafim.setMonth(mesfim)
+					datafim.setFullYear(anoIngresso+2)
+					datafim.setDate(datafim.getDate()-1)
+
+					$("#datafim").datepicker('setDate', datafim)
+				},
+				
+			});
+			$("#hidden-form").fadeIn(200);
+			
+		});
+		
+		$(".btnFechar").click(function(){
+			$("#hidden-form").fadeOut(200);
+		});
+		
+		$("#result_list").chromatable({
+			width:"100%",
+			height:"600px"
+		});
+		
+		$(".btn-print").click(function(){	
+			printResultTablePopUp("Lista de Espera por Bolsa - Doutorado");
+		});
+    });
+
+</script>
+{%endblock%}
+
+{%block extrastyle%}
+	{{block.super}}
+	
+	<style>
+		#hidden-form{
+			z-index: 50;
+			position: fixed;
+			top:30%;
+			left:35%;
+			background-color: white;
+		}
+		#hidden-form form{
+			border:1px solid #417690;
+		}
+		#hidden-form #fields{
+			padding:10px;
+		}
+		#hidden-form label{
+			display:block;
+			float:left;
+			width:11em;
+		}
+		#hidden-form h1{
+			background-color: #417690;
+		    color: white;
+		    padding:15px;
+		    margin-bottom: 10px;
+		   	
+		}
+		#hidden-form .btnFechar{
+			background-color: white;
+		    padding: 2px;
+		    position: absolute;
+		    right: 1px;
+		    text-align: center;
+		    top: 1px;
+		    width: 10px;
+		}
+		#hidden-form .btnFechar:hover{
+			cursor:pointer;
+		}
+		
+		
+		#changelist-filter{
+			width:158px;
+		}
+		
+	</style>
+{%endblock%}
+
+{%block content_title%}
+	<h1 class="tituloPrincipal">Lista de Espera por Bolsa - Doutorado</h1>
+{%endblock%}
+
+{%block content%}
+	<div ><a class="btn-print" href="">Vers. Impressão</a></div>
+	
+	<ul class="object-tools" style="margin-right:150px; clear: both">
+			<li><a href="atualizarGrauEsperaBolsa">Atualizar Grau de Espera</a></li>
+	</ul>
+	
+	{{block.super}}
+	
+	<div id="hidden-form" style="display:none;">
+		<form action="./alocarBolsa/" method="post">{% csrf_token %}
+			<h1> </h1>
+			<input id="idAluno" type="hidden" name="idAluno"/>
+			<input id="nivel" type="hidden" name="nivel" value="D"/>
+			
+			<span class='btnFechar'>x</span>
+			<div id="fields">
+				<div>
+					
+					<label>Bolsas disponíveis:</label>
+					<select name="idBolsa">
+						<option value="null">----</option>
+						{%for b in bolsas%}
+						<option value="{{b.id}}">{{b}}</option>
+						{%endfor%}
+					</select>
+				</div>
+				<div>
+					<label>Data de Início:</label>
+					<input type="text" id="datainicio" class="data" name="dataInicio"/>
+				</div>
+				<div>
+					<label>Data de Fim:</label>
+					<input id="datafim" class="data" type="text" name="dataFim"/>
+				</div>
+				<input type="submit" />	
+			</div>
+				
+		</form>	
+	</div>
+	
+
+
+{%endblock%}

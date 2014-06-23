@@ -1,0 +1,96 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_modify adminmedia %}
+
+{%block extrastyle%}
+<style>
+	
+
+</style>
+{%endblock%}
+
+{% block breadcrumbs %}{% if not is_popup %}
+<div class="breadcrumbs">
+     <a href="../../../">{% trans "Home" %}</a> ›
+     <a href="../../">Ppgi</a> ›
+     <a href="../">Alunos</a> › 
+     {% trans 'Visualizar Aluno' %}
+
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div id=''>
+	<h1>{{aluno.nome}}</h1> <br />
+	
+		
+		<label for='nome'>DRE: </label> {{aluno.dre}} <br /><br />
+		<label for='nome'>Sexo:</label> {{aluno.sexo}}<br /><br />
+		<label for='nome'>Nível:</label> {{aluno.cursonivel}}<br /><br />
+		<label for='nome'>Ano de Ingresso:</label> {{aluno.anoingresso}}<br /><br />
+		<label for='nome'>Período de Ingresso:</label> {{aluno.periodoingresso}}<br /><br />
+		<label for='nome'>Situação da Matrícula:</label> {{aluno.situacaomatricula}}<br /><br />
+		<label for='nome'>CR Acumulado:</label> {{aluno.cra}}<br /><br />
+		<label for='nome'>Carga Horária:</label> {{aluno.cargaHoraria}} horas<br /><br />
+		<label for='nome'>Carga Horária Núcleo Básico:</label> {{aluno.cargaHorariaNucleoBasico}} horas<br /><br />
+		
+	
+	<br />
+	
+	<table>
+		<tr>
+			<th style="width: 100px">Ano</th>
+			<th style="width: 100px">Periodo</th>
+			<th style="width: 300px">Disciplina</th>
+			<th style="width: 100px">Conceito</th>
+			<th style="width: 200px">Situação Final</th>
+		</tr>
+	
+		
+		{%regroup discCursadas by anoletivo as discCursadasPorAno%}
+		
+		{%for discPorAno in discCursadasPorAno %}
+		<tr>
+			<td><div style="float:left">{{discPorAno.grouper}}</div></td>
+		
+			{%regroup discPorAno.list by periodoletivo as discCursadasPorPeriodo%}
+			
+			<td colspan='4'>
+			{%for discPorPeriodo in discCursadasPorPeriodo%}
+			
+				<div>
+					<div style="float:left; height:100%">{{discPorPeriodo.grouper}}</div>
+					<table style="">
+						{% for dadosDisc in discPorPeriodo.list %}
+						<tr>	
+							<td style="width:300px;padding-top: 0px; padding-left: 104px">{{dadosDisc.disciplina}}</td>
+							<td style="width:100px; padding-top: 0px;">{{dadosDisc.conceito}}</td>
+							<td style=" padding-top: 0px;">{{dadosDisc.situacaofinal}}</td>
+						</tr>
+						{%endfor%}
+						{%for key,value in dicCraPeriodos.items%}
+							{%if key == discPorAno.grouper%}
+								{%for cra in value%}
+									{%if forloop.counter0 == forloop.parentloop.parentloop.counter0%}
+									<tr><td colspan="3" style="text-align: right">CRA: {{cra}}  </td></tr>
+									{%endif%}
+								{%endfor%}
+							{%endif%}
+						{%endfor%}
+						
+					</table>
+					
+					<br /><br />
+				</div>
+			{%endfor%}
+			</td>
+			
+		</tr>
+		{%endfor%}
+		
+	</table>
+	
+</div>
+
+{% endblock %}

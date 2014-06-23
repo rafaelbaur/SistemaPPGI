@@ -1,0 +1,15 @@
+.btn-print{ 
+	float:right;
+	border:1px solid #CCCCCC;
+	padding:2px;
+	margin-bottom: 5px;
+	background-image:url('media/icon-print.png');
+	background-repeat:no-repeat;
+	text-align:right;
+	height:20px;
+	width:125px;
+}
+
+.tituloPrincipal{
+	float:left;
+}
